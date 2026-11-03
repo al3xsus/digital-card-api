@@ -2,6 +2,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Skill } from './skill.model';
 import { Experience } from './experience.model';
 import { Project } from './project.model';
+import { Social } from './social.model';
 
 @ObjectType()
 export class Profile {
@@ -14,8 +15,8 @@ export class Profile {
   @Field()
   description: string;
 
-  // @Field(() => GraphQLJSON)
-  // socials: any;
+  @Field(() => [Social], { nullable: 'itemsAndList' })
+  socials?: Social[];
 
   @Field(() => [Skill], { nullable: 'itemsAndList' })
   skills?: Skill[];

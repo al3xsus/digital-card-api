@@ -11,12 +11,19 @@ model Profile {
   id          String       @id @default(uuid())
   name        String
   description String
-  socials     Json         
+  socials     Social[]         
   skills      Skill[]
   experience  Experience[]
   projects    Project[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+}
+
+model Social {
+  id        String   @id @default(uuid())
+  url       String
+  profileId String
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
 }
 
 model Skill {

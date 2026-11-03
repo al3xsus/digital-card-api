@@ -10,19 +10,22 @@
 
 2. Business Logic Layer (*.service.ts): Инкапсулирует все доменные правила и трансформации данных. 
 
-3. Data Access Layer (PrismaService): Абстрактная работа с базами данных.
+3. Data Access Layer (PrismaService): Абстрактная работа с БД.
 
 ### 2. Выбор архитектуры: 
 
 #### Модульная слоистая архитектура вместо DDD
 
-При проектировании бэкенда сознательно не использовался подход DDD (Domain-Driven Design), так как для бизнес-домена цифровой визитки он являлся бы избыточным усложнением. Вместо этого выбрана модульная слоистая архитектура (Modular Layered Architecture).
+При проектировании бэкенда сознательно не использовался подход DDD (Domain-Driven Design), так как для цифровой визитки он являлся бы избыточным усложнением. Вместо этого выбрана модульная слоистая архитектура (Modular Layered Architecture), сочетающая в себе DDD и слоистый подходы.
 Почему?
 * Код разделен на независимые модули (profile), внутри которых соблюдается четкая вертикаль: GraphQL Resolvers => Services => Prisma.
 * Модели данных просты и понятны, а все операции над данными сосредоточены в сервисах.
 * Структура позволяет легко добавлять новые домены (например, blog или auth), сохраняя кодовую базу чистой и предсказуемой.
 
-### 3. Оптимизация работы с вложенными данными (Проблема N+1)
+### 3, Модели
+БД состоит из 5 моделей: профиль, ссылки, навыки, проекты и экспириенс. Профиль является неудаляемым синглтоном, который можно только редактировать, все остальные сущности доступны для создания, редактирования и удаления. Профиль реляционно связан с остальными сущностями связью один ко многим, 1:N.
+
+### 4. Оптимизация работы с вложенными данными (Проблема N+1)
 
 В GraphQL очень легко получить проблему N+1 запросов к базе данных, если клиент запрашивает вложенные сущности (например, profile -> projects -> technologies).
 Для предотвращения серии каскадных запросов к БД в сервисах применена инструкция include.
@@ -43,56 +46,62 @@ DevOps: Docker, Docker Compose
 
 ## Быстрый запуск
 
-Требования
-Installed Docker and Docker Compose
+Требования:
 
-Installed Node.js (v20+) optional for local run
+* Docker and Docker Compose
+* Node.js (v20+) (optional)
 
 Запуск в Docker (Рекомендуемый способ)
+
 Клонируйте репозиторий:
 
-git clone https://github.com/al3xsus/digital-card.git
-cd digital-card
+```
+git clone https://github.com/al3xsus/digital-card-api.git
+cd digital-card-api
+```
 
 Запустите весь стек (PostgreSQL + NestJS API):
 
+```
 docker compose up --build
+```
 
 При старте контейнера автоматически применятся миграции БД и выполнится сидинг.
 
 Откройте Apollo Sandbox в браузере по адресу:
 
+```
 http://localhost:3000/graphql
+```
 
 ## Пример GraphQL-запроса
 Скопируйте следующий запрос в Apollo Sandbox для проверки получения полного профиля визитки со всеми вложенными связями:
 
 ```graphql
-query GetFullProfile {
-  getProfile {
+query GetProfile {
+  profile {
     id
-    fullName
-    title
-    bio
-    email
+    name
+    description
+    socials {
+      id
+      url
+    }
     skills {
       id
       name
-      category
     }
     projects {
       id
-      title
-      description
-      technologies
-      link
+      name
+      url
     }
-    experiences {
+    experience {
       id
       company
       position
-      startDate
-      endDate
+      period
+      achievements
     }
   }
 }

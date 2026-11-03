@@ -7,13 +7,7 @@ export class CreateProjectInput {
 
   @Field()
   url: string;
-
-  @Field(() => ID)
-  profileId: string;
 }
 
 @InputType()
-export class UpdateProjectInput extends PartialType(CreateProjectInput) {
-  @Field(() => ID)
-  id: string;
-}
+export class UpdateProjectInput extends PartialType(CreateProjectInput) {}

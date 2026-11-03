@@ -1,4 +1,4 @@
-import { InputType, Field, PartialType } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateProfileInput {
@@ -7,7 +7,4 @@ export class UpdateProfileInput {
 
   @Field({ nullable: true })
   description?: string;
-
-  // @Field(() => GraphQLJSON, { nullable: true })
-  // socials?: Record<string, any>;
 }

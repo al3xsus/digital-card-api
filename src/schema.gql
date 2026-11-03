@@ -5,6 +5,8 @@
 type Skill {
   id: ID!
   name: String!
+  profileId: ID!
+  profile: Profile
 }
 
 type Experience {
@@ -13,23 +15,105 @@ type Experience {
   position: String!
   period: String!
   achievements: [String!]!
+  profileId: ID!
+  profile: Profile
 }
 
 type Project {
   id: ID!
   name: String!
   url: String!
+  profileId: ID!
+  profile: Profile
+}
+
+type Social {
+  id: ID!
+  url: String!
+  profileId: ID!
+  profile: Profile
 }
 
 type Profile {
   id: ID!
   name: String!
   description: String!
-  skills: [Skill]!
-  experience: [Experience]!
-  projects: [Project]!
+  socials: [Social]
+  skills: [Skill]
+  experience: [Experience]
+  projects: [Project]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Query {
   profile: Profile
+}
+
+type Mutation {
+  updateProfile(input: UpdateProfileInput!): Profile!
+  addSkill(input: CreateSkillInput!): Skill!
+  updateSkill(id: String!, input: UpdateSkillInput!): Skill!
+  deleteSkill(id: String!): Boolean!
+  addProject(input: CreateProjectInput!): Project!
+  updateProject(id: String!, input: UpdateProjectInput!): Project!
+  deleteProject(id: String!): Boolean!
+  addExperience(input: CreateExperienceInput!): Experience!
+  updateExperience(id: String!, input: UpdateExperienceInput!): Experience!
+  deleteExperience(id: String!): Boolean!
+  addSocial(input: CreateSocialInput!): Social!
+  updateSocial(id: String!, input: UpdateSocialInput!): Social!
+  deleteSocial(id: String!): Boolean!
+}
+
+input UpdateProfileInput {
+  name: String
+  description: String
+}
+
+input CreateSkillInput {
+  name: String!
+}
+
+input UpdateSkillInput {
+  name: String
+}
+
+input CreateProjectInput {
+  name: String!
+  url: String!
+}
+
+input UpdateProjectInput {
+  name: String
+  url: String
+}
+
+input CreateExperienceInput {
+  company: String!
+  position: String!
+  period: String!
+  achievements: [String!]! = []
+}
+
+input UpdateExperienceInput {
+  company: String
+  position: String
+  period: String
+  achievements: [String!] = []
+}
+
+input CreateSocialInput {
+  name: String!
+  url: String!
+}
+
+input UpdateSocialInput {
+  name: String
+  url: String
 }

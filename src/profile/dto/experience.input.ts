@@ -13,13 +13,7 @@ export class CreateExperienceInput {
 
   @Field(() => [String], { defaultValue: [] })
   achievements: string[];
-
-  @Field(() => ID)
-  profileId: string;
 }
 
 @InputType()
-export class UpdateExperienceInput extends PartialType(CreateExperienceInput) {
-  @Field(() => ID)
-  id: string;
-}
+export class UpdateExperienceInput extends PartialType(CreateExperienceInput) {}

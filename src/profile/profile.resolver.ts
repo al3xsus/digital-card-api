@@ -4,10 +4,12 @@ import { Profile } from './models/profile.model';
 import { Skill } from './models/skill.model';
 import { Project } from './models/project.model';
 import { Experience } from './models/experience.model';
+import { Social } from './models/social.model';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { CreateSkillInput, UpdateSkillInput } from './dto/skill.input';
 import { CreateProjectInput, UpdateProjectInput } from './dto/project.input';
 import { CreateExperienceInput, UpdateExperienceInput } from './dto/experience.input';
+import { CreateSocialInput, UpdateSocialInput } from './dto/social.input';
 
 @Resolver(() => Profile)
 export class ProfileResolver {
@@ -21,22 +23,15 @@ export class ProfileResolver {
 // --- Profile Mutations ---
   @Mutation(() => Profile)
   async updateProfile(@Args('input') input: UpdateProfileInput) {
-    // 1. Fetch the single profile to get its ID
-    const profile = await this.profileService.getProfile();
-    if (!profile) {
-      throw new Error('Profile not found');
-    }
-    // 2. Update using the fetched ID
-    return this.profileService.updateProfile(profile.id, input);
+    return this.profileService.updateProfile(input);
   }
 
   // --- Skill Mutations ---
   @Mutation(() => Skill)
   async addSkill(
-    @Args('profileId') profileId: string,
     @Args('input') input: CreateSkillInput,
   ) {
-    return this.profileService.addSkill(profileId, input);
+    return this.profileService.addSkill(input);
   }
 
   @Mutation(() => Skill)
@@ -55,10 +50,9 @@ export class ProfileResolver {
   // --- Project Mutations ---
   @Mutation(() => Project)
   async addProject(
-    @Args('profileId') profileId: string,
     @Args('input') input: CreateProjectInput,
   ) {
-    return this.profileService.addProject(profileId, input);
+    return this.profileService.addProject(input);
   }
 
   @Mutation(() => Project)
@@ -77,10 +71,9 @@ export class ProfileResolver {
   // --- Experience Mutations ---
   @Mutation(() => Experience)
   async addExperience(
-    @Args('profileId') profileId: string,
     @Args('input') input: CreateExperienceInput,
   ) {
-    return this.profileService.addExperience(profileId, input);
+    return this.profileService.addExperience(input);
   }
 
   @Mutation(() => Experience)
@@ -94,5 +87,26 @@ export class ProfileResolver {
   @Mutation(() => Boolean)
   async deleteExperience(@Args('id') id: string) {
     return this.profileService.deleteExperience(id);
+  }
+
+  // --- Social Mutations ---
+  @Mutation(() => Social)
+  async addSocial(
+    @Args('input') input: CreateSocialInput,
+  ) {
+    return this.profileService.addSocial(input);
+  }
+
+  @Mutation(() => Social)
+  async updateSocial(
+    @Args('id') id: string,
+    @Args('input') input: UpdateSocialInput,
+  ) {
+    return this.profileService.updateSocial(id, input);
+  }
+
+  @Mutation(() => Boolean)
+  async deleteSocial(@Args('id') id: string) {
+    return this.profileService.deleteSocial(id);
   }
 }

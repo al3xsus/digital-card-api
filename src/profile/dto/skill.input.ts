@@ -4,13 +4,7 @@ import { InputType, Field, ID, PartialType } from '@nestjs/graphql';
 export class CreateSkillInput {
   @Field()
   name: string;
-
-  @Field(() => ID)
-  profileId: string;
 }
 
 @InputType()
-export class UpdateSkillInput extends PartialType(CreateSkillInput) {
-  @Field(() => ID)
-  id: string;
-}
+export class UpdateSkillInput extends PartialType(CreateSkillInput) {}
