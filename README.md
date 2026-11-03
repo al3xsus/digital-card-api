@@ -107,6 +107,28 @@ query GetProfile {
 }
 ```
 
+Пример добавления, редактирования и удаления сущности (в данном случае, скилла)
+
+```graphql
+mutation CreateSkill {
+  addSkill (input: {name: "Cool skill"}),
+  {
+    id, name
+  }
+}
+
+mutation UpdateSkill {
+  updateSkill (id: "SKILL_ID", input: {name: "Cool skill v2"}),
+  {
+    id, name
+  }
+}
+
+mutation DeleteSkill {
+  deleteSkill(id: "SKILL_ID")
+}
+```
+
 ## ⚙️ Переменные окружения (.env)
 Для работы приложения необходим файл .env в корне проекта. Создайте его на основе примера ниже:
 
