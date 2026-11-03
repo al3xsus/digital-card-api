@@ -14,12 +14,21 @@ export class Profile {
   @Field()
   description: string;
 
-  @Field(() => [Skill], { nullable: 'items' })
+  // @Field(() => GraphQLJSON)
+  // socials: any;
+
+  @Field(() => [Skill], { nullable: 'itemsAndList' })
   skills?: Skill[];
 
-  @Field(() => [Experience], { nullable: 'items' })
+  @Field(() => [Experience], { nullable: 'itemsAndList' })
   experience?: Experience[];
 
-  @Field(() => [Project], { nullable: 'items' })
+  @Field(() => [Project], { nullable: 'itemsAndList' })
   projects?: Project[];
+
+  @Field(() => Date)
+  createdAt: Date;
+
+  @Field(() => Date)
+  updatedAt: Date;
 }
